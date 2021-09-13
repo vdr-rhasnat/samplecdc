@@ -1,0 +1,16 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    @foreach (var cd in @Model.connectedDevices.OrderBy(key => key.Key))
+    {
+        HeartbeatRecord hr = cd.Value;
+
+        <div>
+            @hr.Tag
+        </div>
+    }
+</div>
