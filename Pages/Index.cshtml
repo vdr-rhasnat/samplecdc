@@ -1,16 +1,22 @@
 ﻿@page
-@model IndexModel
 @{
     ViewData["Title"] = "Home page";
 }
 
 <div class="text-center">
-    @foreach (var cd in @Model.connectedDevices.OrderBy(key => key.Key))
-    {
-        HeartbeatRecord hr = cd.Value;
-
-        <div>
-            @hr.Tag
-        </div>
-    }
+    <ul id="messages"></ul>
 </div>
+@section Scripts
+{ 
+ <script>
+     var connection = new signalR.HubConnectionBuilder().withUrl("/dataHub").build();
+
+     connection.on("ReceiveDeviceList", function (msg) {
+         var li = document.createElement("li");
+         document.getElementById("messages").appendChild(li);
+         li.textContent = `${msg}`;
+     });
+
+     connection.start();
+ </script>
+}
