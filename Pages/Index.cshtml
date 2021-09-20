@@ -36,11 +36,26 @@
 
          var tbodyContent = "";
 
+         var color = "";
+
+         var now = moment(new Date());
+
          for (var key in deviceList) {
+             var lastBeat = moment(deviceList[key].LastHeartBeat);
+             var diff = now.diff(lastBeat, 'minutes');
+
+             if (diff > 10) {
+                 color = "red";
+             } else if (diff > 2) {
+                 color = "orange";
+             } else {
+                 color = "green";
+             }
+
              tbodyContent += `
                 <tr>
                     <td>${deviceList[key].Tag}</td>
-                    <td>${moment(deviceList[key].LastHeartBeat).format("DD/MM/YYYY h:mm:ss a")}</td>
+                    <td style="color: ${color}">${moment(deviceList[key].LastHeartBeat).format("DD/MM/YYYY h:mm:ss a")}</td>
                     <td>${deviceList[key].CustomerId}</td>
                     <td>${deviceList[key].SiteId}</td>
                     <td>${deviceList[key].DeviceId}</td>
