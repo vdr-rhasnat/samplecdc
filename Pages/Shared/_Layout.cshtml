@@ -4,7 +4,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - samplecdc</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
@@ -14,7 +13,8 @@
             @RenderBody()
         </main>
     </div>
-    <script src="~/js/signalr.js"></script>
+    <script src="~/js/signalr.min.js"></script>
+    <script src="~/js/moment.js"></script>
 
 
     @await RenderSectionAsync("Scripts", required: false)

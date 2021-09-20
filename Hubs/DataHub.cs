@@ -8,12 +8,14 @@ namespace samplecdc.Hubs
 {
     public class DataHub : Hub
     {
-        public async Task SendDeviceList(Dictionary<string, object> connectedDevice)
-        {
-            await Clients.All.SendAsync("ReceiveDeviceList", "hello world");
-        }
+        //public async Task SendDeviceList(Dictionary<string, object> connectedDevice)
+        //{
+        //    await Clients.All.SendAsync("ReceiveDeviceList", "hello world");
+        //}
         public override Task OnConnectedAsync()
         {
+            HeartbeatData data = new HeartbeatData(this);
+            data.GetData();
             return base.OnConnectedAsync();
         }
     }

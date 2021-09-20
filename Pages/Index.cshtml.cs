@@ -18,7 +18,7 @@ namespace samplecdc.Pages
        
 
        
-        public async void OnGet()
+        public void OnGet()
         {
             
         }

@@ -4,17 +4,51 @@
 }
 
 <div class="text-center">
-    <ul id="messages"></ul>
+    <h3>****** DEVICE HEARTBEATS VIEW ******</h3>
+    <table id="table" border="1">
+        <thead>
+            <tr>
+                <th>Tag</th>
+                <th>Last Heartbeat</th>
+                <th>Customer Id</th>
+                <th>Site Id</th>
+                <th>Device Id</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="5">
+                    Receiving Data ....
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 @section Scripts
 { 
  <script>
      var connection = new signalR.HubConnectionBuilder().withUrl("/dataHub").build();
 
-     connection.on("ReceiveDeviceList", function (msg) {
-         var li = document.createElement("li");
-         document.getElementById("messages").appendChild(li);
-         li.textContent = `${msg}`;
+     var tbody = document.querySelector('#table tbody');
+
+     connection.on("ReceiveDeviceList", function (deviceListString) {
+         var deviceList = JSON.parse(deviceListString);
+
+         var tbodyContent = "";
+
+         for (var key in deviceList) {
+             tbodyContent += `
+                <tr>
+                    <td>${deviceList[key].Tag}</td>
+                    <td>${moment(deviceList[key].LastHeartBeat).format("DD/MM/YYYY h:mm:ss a")}</td>
+                    <td>${deviceList[key].CustomerId}</td>
+                    <td>${deviceList[key].SiteId}</td>
+                    <td>${deviceList[key].DeviceId}</td>
+                </tr>
+            `;
+         }
+
+         tbody.innerHTML = tbodyContent;
      });
 
      connection.start();

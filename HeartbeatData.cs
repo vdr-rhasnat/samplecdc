@@ -9,28 +9,22 @@ using System.Threading;
 using System.Text.Json;
 using System.Linq;
 using samplecdc.Hubs;
-using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.AspNetCore.SignalR;
 
 namespace samplecdc
 {
     public class HeartbeatData
     {
-        public Dictionary<string, HeartbeatRecord> connectedDevices = new Dictionary<string, HeartbeatRecord>();
-        //private bool cancelled;
+        private DataHub hub;
+        public HeartbeatData(DataHub hubCtx)
+        {
+            hub = hubCtx;
+        }
 
+        public Dictionary<string, HeartbeatRecord> connectedDevices = new Dictionary<string, HeartbeatRecord>();
 
         public async Task Consume(IEnumerable<string> topics, ClientConfig config)
         {
-            var connection = new HubConnectionBuilder()
-    .WithUrl("https://example.com/chathub", options =>
-    {
-        options.Headers["Foo"] = "Bar";
-        options.SkipNegotiation = true;
-        options.Transports = HttpTransportType.WebSockets;
-        options.Cookies.Add(new Cookie(/* ... */);
-        options.ClientCertificates.Add(/* ... */);
-    })
-    .Build();
             var consumerConfig = new ConsumerConfig(config);
             string deviceId = new DeviceIdBuilder()
                 .AddMachineName().UseFormatter(new StringDeviceIdFormatter(new PlainTextDeviceIdComponentEncoder()))
@@ -44,17 +38,8 @@ namespace samplecdc
 
 
             CancellationTokenSource cts = new CancellationTokenSource();
-            /* Console.CancelKeyPress += (_, e) =>
-             {
-                 e.Cancel = true; // prevent the process from terminating.
-                 cts.Cancel();
-             };*/
 
-            int progress = 1;
-
-            using (var consumer = new ConsumerBuilder<string, string>(consumerConfig)
-                 //.SetErrorHandler((_, e) => Console.WriteLine($"Error: {e.Reason}"))
-                 .Build())
+            using (var consumer = new ConsumerBuilder<string, string>(consumerConfig).Build())
             {
                 consumer.Subscribe(topics);
 
@@ -83,15 +68,7 @@ namespace samplecdc
                             connectedDevices[heartbeatRecord.DeviceId] = heartbeatRecord;
                         }
 
-                        await hub.Clients.All.SendAsync("ReceiveDeviceList", "Hello World");
-
-                        // if(record.IsPartitionEOF) {
-                        //UpdateHeartbeatView();
-                        // } else {
-                        //     Console.Clear();
-                        //     Console.WriteLine("Loading Heartbeats" + new String('.', progress));
-                        //progress++;
-                        // }
+                        await hub.Clients.All.SendAsync("ReceiveDeviceList", JsonSerializer.Serialize(connectedDevices));
                     }
                 }
                 catch (OperationCanceledException)
@@ -106,7 +83,7 @@ namespace samplecdc
 
             await Task.CompletedTask;
         }
-        public async void GetData()
+        public void GetData()
         {
             var settings = new Dictionary<string, string>();
             settings.Add("bootstrap.servers", "pkc-lgwgm.eastus2.azure.confluent.cloud:9092");
@@ -117,10 +94,7 @@ namespace samplecdc
 
             ClientConfig config = new ClientConfig(settings);
 
-            await Consume("cdc.atp.dbo.Heartbeat;cdc.max.dbo.Heartbeat".Split(';').AsEnumerable(), config);
+            Consume("cdc.atp.dbo.Heartbeat;cdc.max.dbo.Heartbeat".Split(';').AsEnumerable(), config);
         }
-
-
-
     }
 }
