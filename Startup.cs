@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using samplecdc.Hubs;
+using Heartbeat.Hubs;
 
-namespace samplecdc
+namespace Heartbeat
 {
     public class Startup
     {

@@ -8,10 +8,10 @@ using DeviceId.Encoders;
 using System.Threading;
 using System.Text.Json;
 using System.Linq;
-using samplecdc.Hubs;
+using Heartbeat.Hubs;
 using Microsoft.AspNetCore.SignalR;
 
-namespace samplecdc
+namespace Heartbeat
 {
     public class HeartbeatData
     {

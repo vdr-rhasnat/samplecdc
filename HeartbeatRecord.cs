@@ -1,6 +1,6 @@
 using System;
 
-namespace samplecdc
+namespace Heartbeat
 {
     public class HeartbeatRecord : IComparable<HeartbeatRecord> {
         public string DeviceId { get; set; }

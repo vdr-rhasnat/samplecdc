@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 
-namespace samplecdc.Pages
+namespace Heartbeat.Pages
 {
     public class PrivacyModel : PageModel
     {

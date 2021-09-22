@@ -1,6 +1,6 @@
 using System;
 
-namespace samplecdc
+namespace Heartbeat
 {
     public class ParataKey {
         public string customerId { get; set; }
